@@ -29,11 +29,13 @@ async function run() {
         const userCollection = client.db("userDatabase").collection("users");
         const appliedVisaCollection = client.db("appliedVisaDatabase").collection("appliedVisas");
 
-        userCollection
+
+        // userCollection
         app.get('/users', async (req, res) => {
             const result = await userCollection.find().toArray();
             res.send(result);
         })
+
         app.post('/users', async (req, res) => {
             const newUserInfo = req.body;
             const result = await userCollection.insertOne(newUserInfo);
@@ -47,13 +49,20 @@ async function run() {
             const result = await visaCollection.find().toArray();
             res.send(result);
         })
-
         app.post('/visas', async (req, res) => {
             const newVisaInfo = req.body;
             const result = await visaCollection.insertOne(newVisaInfo);
             console.log(newVisaInfo);
             res.send(result);
         })
+
+        app.post('/visas/my-visas', async (req, res) => {
+            const currentUserEmail = req.body.email;
+            const query = { userEmail: currentUserEmail };
+            const result = await visaCollection.find(query).toArray();
+            res.send(result);
+        })
+
         // await client.connect();
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
