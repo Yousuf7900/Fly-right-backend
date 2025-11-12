@@ -25,8 +25,20 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
 
+        const visaCollection = client.db("visaDatabase").collection("visas");
+        const userCollection = client.db("userDatabase").collection("users");
 
+        app.get('/visas', async (req, res) => {
+            const result = await visaCollection.find().toArray();
+            res.send(result);
+        })
 
+        app.post('/visas', async (req, res) => {
+            const newVisaInfo = req.body;
+            const result = await visaCollection.insertOne(newVisaInfo);
+            console.log(newVisaInfo);
+            res.send(result);
+        })
         // await client.connect();
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
