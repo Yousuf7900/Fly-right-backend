@@ -27,7 +27,22 @@ async function run() {
 
         const visaCollection = client.db("visaDatabase").collection("visas");
         const userCollection = client.db("userDatabase").collection("users");
+        const appliedVisaCollection = client.db("appliedVisaDatabase").collection("appliedVisas");
 
+        userCollection
+        app.get('/users', async (req, res) => {
+            const result = await userCollection.find().toArray();
+            res.send(result);
+        })
+        app.post('/users', async (req, res) => {
+            const newUserInfo = req.body;
+            const result = await userCollection.insertOne(newUserInfo);
+            console.log(newUserInfo);
+            res.send(result);
+        })
+
+
+        // visaCollection
         app.get('/visas', async (req, res) => {
             const result = await visaCollection.find().toArray();
             res.send(result);
