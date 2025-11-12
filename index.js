@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const app = express();
 
@@ -49,6 +49,14 @@ async function run() {
             const result = await visaCollection.find().toArray();
             res.send(result);
         })
+
+        app.get('/visas/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const result = await visaCollection.findOne({ _id: new ObjectId(id) })
+            res.send(result);
+        })
+
         app.post('/visas', async (req, res) => {
             const newVisaInfo = req.body;
             const result = await visaCollection.insertOne(newVisaInfo);
