@@ -58,7 +58,19 @@ async function run() {
         })
 
         // find only current user applied visas
-        
+        app.post('/applied-visa/my-visa', async (req, res) => {
+            const userEmail = req.body.email;
+            const query = { email: userEmail };
+            const result = await appliedVisaCollection.find(query).toArray();
+            res.send(result);
+        })
+
+        app.delete('/applied-visa/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await appliedVisaCollection.deleteOne(query);
+            res.send(result);
+        })
 
 
         // visaCollection
@@ -70,6 +82,18 @@ async function run() {
         app.get('/visas/:id', async (req, res) => {
             const id = req.params.id;
             const result = await visaCollection.findOne({ _id: new ObjectId(id) })
+            res.send(result);
+        })
+
+        app.delete('/visas/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await visaCollection.deleteOne(query);
+            res.send(result);
+        })
+
+        app.get('/visas', async (req, res) => {
+            const result = await visaCollection.find().sort({ _id: -1 }).limit(5).toArray();
             res.send(result);
         })
 
