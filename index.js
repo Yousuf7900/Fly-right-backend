@@ -43,6 +43,23 @@ async function run() {
             res.send(result);
         })
 
+        // applied visa collection
+        // get all visas
+        app.get('/applied-visa', async (req, res) => {
+            const allAppliedVisas = await appliedVisaCollection.find().toArray();
+            res.send(allAppliedVisas);
+        })
+
+        // insert applied visa
+        app.post('/applied-visa', async (req, res) => {
+            const applicationInfo = req.body;
+            const result = await appliedVisaCollection.insertOne(applicationInfo);
+            res.send(result);
+        })
+
+        // find only current user applied visas
+        
+
 
         // visaCollection
         app.get('/visas', async (req, res) => {
@@ -52,7 +69,6 @@ async function run() {
 
         app.get('/visas/:id', async (req, res) => {
             const id = req.params.id;
-            console.log(id);
             const result = await visaCollection.findOne({ _id: new ObjectId(id) })
             res.send(result);
         })
