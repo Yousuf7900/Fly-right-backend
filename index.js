@@ -93,7 +93,30 @@ async function run() {
         })
 
         app.get('/visas', async (req, res) => {
-            const result = await visaCollection.find().sort({ _id: -1 }).limit(5).toArray();
+            const result = await visaCollection.find().sort({ _id: -1 }).limit(6).toArray();
+            res.send(result);
+        })
+
+        // update code
+        app.patch('/visas/:id', async (req, res) => {
+            const visaId = req.params.id;
+            const query = { _id: new ObjectId(visaId) };
+            const updatedVisa = req.body;
+            const value = {
+                $set: {
+                    country_image: updatedVisa.country_image,
+                    country_name: updatedVisa.country_name,
+                    visa_type: updatedVisa.visa_type,
+                    processing_time: updatedVisa.processing_time,
+                    age_restriction: updatedVisa.age_restriction,
+                    fee: updatedVisa.fee,
+                    validity: updatedVisa.fee,
+                    application_method: updatedVisa.application_method,
+                    required_documents: updatedVisa.required_documents,
+                    description: updatedVisa.description
+                }
+            }
+            const result = await visaCollection.updateOne(query, value);
             res.send(result);
         })
 
